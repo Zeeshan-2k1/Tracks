@@ -9,6 +9,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get('/tracks', async (req, res) => {
+  console.log('fetch');
   const tracks = await Track.find({ userId: req.user._id });
 
   res.send(tracks);
@@ -16,6 +17,7 @@ router.get('/tracks', async (req, res) => {
 
 router.post('/tracks', async (req, res) => {
   const { name, locations } = req.body;
+  console.log('requested');
 
   if (!name || !locations) {
     console.log('You must provide a name and locations');
