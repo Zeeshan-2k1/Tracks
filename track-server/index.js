@@ -1,11 +1,12 @@
-require('./models/User');
-require('./models/Track');
+require('dotenv').config();
+require('./src/models/User');
+require('./src/models/Track');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
-const trackRoutes = require('./routes/trackRoutes');
-const requireAuth = require('./middlewares/requireAuth');
+const authRoutes = require('./src/routes/authRoutes');
+const trackRoutes = require('./src/routes/trackRoutes');
+const requireAuth = require('./src/middlewares/requireAuth');
 
 const app = express();
 
@@ -13,12 +14,9 @@ app.use(bodyParser.json());
 app.use(authRoutes);
 app.use(trackRoutes);
 
-const mongoUri =
-  'mongodb+srv://admin:zeeshi2k1@reactnative01.tvxm7.mongodb.net/<dbname>?retryWrites=true&w=majority';
+const mongoUri = process.env.MONGODB_URL; //Enter MongoDB URL
 if (!mongoUri) {
-  throw new Error(
-    `MongoURI was not supplied.  Make sure you watch the video on setting up Mongo DB!`
-  );
+  throw new Error(`MongoURI was not supplied.`);
 }
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
@@ -35,6 +33,6 @@ app.get('/', requireAuth, (req, res) => {
   res.send(`Your email: ${req.user.email}`);
 });
 
-app.listen(3000, () => {
-  console.log('Listening on port 3000');
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });
